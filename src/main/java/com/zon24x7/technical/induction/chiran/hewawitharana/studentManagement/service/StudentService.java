@@ -1,12 +1,12 @@
 package com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service;
 
+import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.common.MessageConstants;
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.exception.ResourceNotFoundException;
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model.Student;
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,11 +14,9 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    private static final List<Student> students = new ArrayList<>();
-
     public Student findStudentById(Long studentId) throws ResourceNotFoundException {
         return studentRepository.findById(studentId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Student not found for this id :: " + studentId));
+                    .orElseThrow(() -> new ResourceNotFoundException(MessageConstants.studentNotFound + studentId));
     }
 
     public List<Student> findAllStudents() {
@@ -35,7 +33,7 @@ public class StudentService {
 
     public Student updateStudent(Long studentId, Student studentDetails) throws ResourceNotFoundException {
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Student not found for this id :: " + studentId));
+                .orElseThrow(() -> new ResourceNotFoundException(MessageConstants.studentNotFound + studentId));
 
         student.setName(studentDetails.getName());
         student.setAddress(studentDetails.getAddress());
@@ -46,7 +44,7 @@ public class StudentService {
 
     public void deleteStudent(Long studentId) throws ResourceNotFoundException {
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Student not found for this id :: " + studentId));
+                .orElseThrow(() -> new ResourceNotFoundException(MessageConstants.studentNotFound + studentId));
         studentRepository.delete(student);
     }
 

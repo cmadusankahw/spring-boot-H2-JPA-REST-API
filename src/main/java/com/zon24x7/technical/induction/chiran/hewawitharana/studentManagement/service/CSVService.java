@@ -1,5 +1,6 @@
 package com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service;
 
+import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.common.MessageConstants;
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.repository.StudentRepository;
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,10 @@ public class CSVService {
                 }
 
             } catch (IOException e) {
-                throw new RuntimeException("fail to store csv data: " + e.getMessage());
+                throw new RuntimeException(MessageConstants.csvParseFailed + e.getMessage());
             }
         } else {
-            throw new RuntimeException("please upload a csv file! ");
+            throw new RuntimeException(MessageConstants.noCsvUploaded);
         }
     }
 }
