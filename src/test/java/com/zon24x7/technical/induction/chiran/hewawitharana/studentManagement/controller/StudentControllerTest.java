@@ -1,67 +1,115 @@
 package com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.AbstractTest;
+import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.common.MessageConstants;
+import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model.Student;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import java.util.Date;
 
-import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model.Student;
-import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service.StudentService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = StudentController.class)
-@WithMockUser
-class StudentControllerTest {
+public class StudentControllerTest extends AbstractTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private StudentService studentService;
-
-    Student mockStudent = new Student((long) 1, "Test Student", new Date(), "colombo 01");
-
-    // String exampleCourseJson = "{\"name\":\"Spring\",\"description\":\"10Steps\",\"steps\":[\"Learn Maven\",\"Import Project\",\"First Example\",\"Second Example\"]}";
-
-    @Test
-    void uploadFile() {
+    @Override
+    @Before
+    public void setUp() {
+        super.setUp();
     }
 
     @Test
-    void getAllStudents() {
+    public void getAllStudents() throws Exception {
+        String uri = "/api/students";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(200, status);
+        String content = mvcResult.getResponse().getContentAsString();
+        Student[] studentList = super.mapFromJson(content, Student[].class);
+        assertTrue( studentList.length > 0);
     }
 
     @Test
-    void getStudentById() {
+    public void getStudentById() throws Exception {
+        String uri = "/api/students/1";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(200, status);
+        String content = mvcResult.getResponse().getContentAsString();
+        Student student = super.mapFromJson(content, Student.class);
+        assertEquals(1, (long) student.getId());
+        assertEquals("ravindu", student.getName());
+        assertEquals("colombo", student.getAddress());
     }
 
     @Test
-    void getStudentsByName() {
+    public void getStudentsByName() throws Exception {
+        String uri = "/api/student/ra";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(200, status);
+        String content = mvcResult.getResponse().getContentAsString();
+        Student[] students = super.mapFromJson(content, Student[].class);
+        assertEquals(1, (long) students[0].getId());
+        assertEquals("ravindu", students[0].getName());
+        assertEquals("colombo", students[0].getAddress());
     }
 
     @Test
-    void createStudent() {
+    public void uploadFile() {
+
     }
 
     @Test
-    void updateStudent() {
+    public void createStudent() throws Exception {
+        String uri = "/api/students";
+        Student student = new Student("TestStudent",new Date(),"test address");
+
+        String inputJson = super.mapToJson(student);
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(uri)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(inputJson)).andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(200, status);
+        MockHttpServletResponse content = mvcResult.getResponse();
+        assertEquals(content.getContentType(), "application/json");
+        assertEquals(content.getContentAsString().substring(0,3), inputJson.substring(0,3) );
     }
 
     @Test
-    void deleteStudent() {
+    public void updateStudent() throws Exception {
+        String uri = "/api/students/3";
+        Student student = new Student("TestStudent",new Date(),"updated address");
+        String inputJson = super.mapToJson(student);
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.put(uri)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(inputJson)).andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(200, status);
+        MockHttpServletResponse content = mvcResult.getResponse();
+        assertEquals(content.getContentType(), "application/json");
+        assertEquals(content.getContentAsString().substring(0,6), inputJson.substring(0,6) );
+    }
+
+    @Test
+    public void deleteStudent() throws Exception {
+        String uri = "/api/students/1";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.delete(uri)).andReturn();
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(200, status);
+        String content = mvcResult.getResponse().getContentAsString();
+        assertEquals(content, MessageConstants.studentDeleted + "1");
     }
 }
