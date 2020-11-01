@@ -28,17 +28,12 @@ public class StudentController {
 
     @PostMapping("/students/import")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
-
-        if (CSVHelper.hasCSVFormat(file)) {
             try {
                 csvService.importCSV(file);
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Uploaded the file successfully: " + file.getOriginalFilename()));
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("Could not upload the file: " + file.getOriginalFilename() + "!"));
             }
-        }
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Please upload a csv file!"));
     }
 
 

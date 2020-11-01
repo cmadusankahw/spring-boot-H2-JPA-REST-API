@@ -16,11 +16,13 @@ public class CSVService {
     private StudentRepository studentRepository;
 
     public void importCSV(MultipartFile file) {
-        try {
-            List<Student> students = CSVHelper.csvToStudents(file.getInputStream());
-            studentRepository.saveAll(students);
-        } catch (IOException e) {
-            throw new RuntimeException("fail to store csv data: " + e.getMessage());
+        if (CSVHelper.hasCSVFormat(file)) {
+            try {
+                List<Student> students = CSVHelper.csvToStudents(file.getInputStream());
+                studentRepository.saveAll(students);
+            } catch (IOException e) {
+                throw new RuntimeException("fail to store csv data: " + e.getMessage());
+            }
         }
     }
 }
