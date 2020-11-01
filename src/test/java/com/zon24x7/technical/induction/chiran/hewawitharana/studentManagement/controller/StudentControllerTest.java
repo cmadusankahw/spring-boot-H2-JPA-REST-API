@@ -7,12 +7,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.Date;
 
 import static org.junit.Assert.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 
 public class StudentControllerTest extends AbstractTest {
 
@@ -65,9 +74,19 @@ public class StudentControllerTest extends AbstractTest {
         assertEquals("colombo", students[0].getAddress());
     }
 
-    @Test
-    public void uploadFile() {
 
+    @Test
+    public void uploadFile() throws Exception {
+        MockMultipartFile csvFile = new MockMultipartFile("file", "students.csv", "text/csv", "students".getBytes());
+
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.multipart("/api/students/import")
+                .file(csvFile))
+                .andReturn();
+
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(200, status);
+        MockHttpServletResponse content = mvcResult.getResponse();
+        assertEquals(content.getContentAsString(), MessageConstants.csvUploaded + csvFile.getOriginalFilename());
     }
 
     @Test
