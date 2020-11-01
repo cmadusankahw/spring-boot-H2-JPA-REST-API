@@ -2,8 +2,7 @@
 
 This REST API is generated with Spring Boot Framework 2.3.5 and Java 1.8 with H2 JPA File storage DB support. This project was developed at Zone24x7 Technical Induction
 
-Spring Boot, MongoDB, Angular Restful API Tutorial
-Build a Fully-Fledged Todo App with Spring Boot & MongoDB in the Backend and Angular in the frontend.
+The Application follows SOLID Design Principles, Design Patterns and Exeception Handeling with Unit Testing.
 
 ###Requirements
 
