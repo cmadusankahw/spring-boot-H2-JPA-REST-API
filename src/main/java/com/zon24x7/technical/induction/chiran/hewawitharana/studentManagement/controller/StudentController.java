@@ -1,11 +1,16 @@
 package com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.controller;
 
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.exception.ResourceNotFoundException;
+import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.helper.CSVHelper;
+import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.message.ResponseMessage;
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model.Student;
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.repository.StudentRepository;
+import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service.CSVService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -18,6 +23,26 @@ public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private CSVService csvService;
+
+    @PostMapping("/students/import")
+    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+
+        if (CSVHelper.hasCSVFormat(file)) {
+            try {
+                csvService.importCSV(file);
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Uploaded the file successfully: " + file.getOriginalFilename()));
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("Could not upload the file: " + file.getOriginalFilename() + "!"));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Please upload a csv file!"));
+    }
+
+
+    // ToDo Add Mappings to separate Service Files and call here with Response Message
     @GetMapping("/students")
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
@@ -31,9 +56,14 @@ public class StudentController {
         return ResponseEntity.ok().body(student);
     }
 
+    @GetMapping("/student/{name}")
+    public List<Student> getStudentsByName(@PathVariable(value = "name") String studentName) {
+        return studentRepository.findByName(studentName);
+    }
+
     @PostMapping("/students")
     public Student createStudent(@Valid @RequestBody Student student) {
-        return studentRepository.save(student);
+            return studentRepository.save(student);
     }
 
     @PutMapping("/students/{id}")

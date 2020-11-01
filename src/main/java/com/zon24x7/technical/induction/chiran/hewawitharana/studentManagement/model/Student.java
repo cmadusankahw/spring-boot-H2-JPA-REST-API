@@ -21,6 +21,13 @@ public class Student {
         this.address = address;
     }
 
+    public Student(Long id, String name, Date dob, String address) {
+        this.id = id;
+        this.name = name;
+        this.dob = dob;
+        this.address = address;
+    }
+
     public Student() {
     }
 
@@ -56,5 +63,10 @@ public class Student {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "Tutorial [id=" + id + ", name=" + name + ", dob=" + dob + ", address=" + address + "]";
     }
 }
