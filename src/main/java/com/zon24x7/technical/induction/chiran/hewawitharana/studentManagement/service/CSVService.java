@@ -1,6 +1,5 @@
 package com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service;
 
-import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.helper.CSVHelper;
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.repository.StudentRepository;
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,9 @@ public class CSVService {
     private TeacherRepository teacherRepository;
 
     public void importCSV(MultipartFile file, Enum tableType) {
-        if (CSVHelper.hasCSVFormat(file)) {
+        if (CSVImporter.hasCSVFormat(file)) {
             try {
-                List entities = CSVHelper.csvTotable(file.getInputStream(),tableType);
+                List entities = CSVImporter.csvTotable(file.getInputStream(),tableType);
                 if (STUDENT.equals(tableType)) {
                     studentRepository.saveAll(entities);
                 } else if (TEACHER.equals(tableType)) {

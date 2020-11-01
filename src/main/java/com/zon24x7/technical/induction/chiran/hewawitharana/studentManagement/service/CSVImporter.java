@@ -1,4 +1,4 @@
-package com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.helper;
+package com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service;
 
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model.TableEntity;
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service.CSVFactory;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CSVHelper {
+public class CSVImporter {
     public static String TYPE = "text/csv";
     // static String[] HEADERS = { "id", "name", "dob", "address" };
 
