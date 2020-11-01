@@ -4,7 +4,7 @@ This REST API is generated with Spring Boot Framework 2.3.5 and Java 1.8 with H2
 
 The Application follows SOLID Design Principles, Design Patterns and Exeception Handeling with Unit Testing.
 
-###Requirements
+### Requirements
 
 Java - 1.8.x 
 
@@ -13,7 +13,7 @@ Maven - 3.x.x
 SpringBoot - 2.3.5.x  
 
 
-###Build and run the backend app using maven 
+### Build and run the backend app using maven 
  
  
 `cd spring-boot-backend` 
