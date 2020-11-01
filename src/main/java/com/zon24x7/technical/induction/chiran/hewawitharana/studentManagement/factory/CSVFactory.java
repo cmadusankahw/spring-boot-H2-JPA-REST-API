@@ -1,4 +1,4 @@
-package com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service;
+package com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.factory;
 
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model.Student;
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model.TableEntity;

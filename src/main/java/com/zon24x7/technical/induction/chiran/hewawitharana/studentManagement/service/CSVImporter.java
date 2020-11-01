@@ -1,7 +1,7 @@
 package com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service;
 
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model.TableEntity;
-import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service.CSVFactory;
+import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.factory.CSVFactory;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -29,7 +29,7 @@ public class CSVImporter {
              CSVParser csvParser = new CSVParser(fileReader,
                      CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
 
-            List<TableEntity> tableEntities = new ArrayList<TableEntity>();
+            List<TableEntity> tableEntities = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
