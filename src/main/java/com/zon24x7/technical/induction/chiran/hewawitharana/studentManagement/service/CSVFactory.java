@@ -31,6 +31,7 @@ public class CSVFactory {
                         csvRecord.get("name"),
                         new SimpleDateFormat("yyyy-MM-dd").parse((csvRecord.get("dob"))),
                         csvRecord.get("address"));
+
             } else if(TEACHER.equals(tableType)) {
                 tableEntity = new Teacher(
                         Long.parseLong(csvRecord.get("id")),

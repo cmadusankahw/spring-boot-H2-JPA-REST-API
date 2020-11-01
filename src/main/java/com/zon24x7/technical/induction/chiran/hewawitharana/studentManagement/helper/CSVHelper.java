@@ -1,6 +1,7 @@
 package com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.helper;
 
-import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model.Student;
+import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model.TableEntity;
+import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service.CSVFactory;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -11,11 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
 
 public class CSVHelper {
     public static String TYPE = "text/csv";
@@ -25,29 +24,21 @@ public class CSVHelper {
         return TYPE.equals(file.getContentType());
     }
 
-    public static List<Student> csvToStudents(InputStream is) {
+    public static List<TableEntity> csvTotable(InputStream is, Enum tableType) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(fileReader,
                      CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
 
-            // ToDo use factory pattern to extend CSV creation
-            List<Student> students = new ArrayList<Student>();
-
+            List<TableEntity> tableEntities = new ArrayList<TableEntity>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
             for (CSVRecord csvRecord : csvRecords) {
-                Student Student = new Student(
-                        Long.parseLong(csvRecord.get("id")),
-                        csvRecord.get("name"),
-                        new SimpleDateFormat("yyyy-MM-dd").parse((csvRecord.get("dob"))),
-                        csvRecord.get("address")
-                );
-
-                students.add(Student);
+                TableEntity entity = new CSVFactory(tableType, csvRecord).create();
+                tableEntities.add(entity);
             }
 
-            return students;
-        } catch (IOException | ParseException e) {
+            return tableEntities;
+        } catch (IOException e) {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
     }

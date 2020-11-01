@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model.CSVTypes.STUDENT;
+
 @RestController
 @RequestMapping("/api")
 public class StudentController {
@@ -29,10 +31,10 @@ public class StudentController {
     @PostMapping("/students/import")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
             try {
-                csvService.importCSV(file);
-                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Uploaded the file successfully: " + file.getOriginalFilename()));
+                csvService.importCSV(file, STUDENT);
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage("Uploaded the csv successfully: " + file.getOriginalFilename()));
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("Could not upload the file: " + file.getOriginalFilename() + "!"));
+                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("Could not upload the csv: " + file.getOriginalFilename() + "!"));
             }
     }
 
