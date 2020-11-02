@@ -7,29 +7,10 @@ import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.re
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class StudentService {
+public class UpdateStudentService {
     @Autowired
     private StudentRepository studentRepository;
-
-    public Student findStudentById(Long studentId) throws ResourceNotFoundException {
-        return studentRepository.findById(studentId)
-                    .orElseThrow(() -> new ResourceNotFoundException(MessageConstants.studentNotFound + studentId));
-    }
-
-    public List<Student> findAllStudents() {
-        return studentRepository.findAll();
-    }
-
-    public List<Student> findStudentsByName(String name) {
-        return studentRepository.findByName(name);
-    }
-
-    public Student saveStudent(Student student) {
-        return studentRepository.save(student);
-    }
 
     public Student updateStudent(Long studentId, Student studentDetails) throws ResourceNotFoundException {
         Student student = studentRepository.findById(studentId)
@@ -41,11 +22,4 @@ public class StudentService {
 
         return studentRepository.save(student);
     }
-
-    public void deleteStudent(Long studentId) throws ResourceNotFoundException {
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new ResourceNotFoundException(MessageConstants.studentNotFound + studentId));
-        studentRepository.delete(student);
-    }
-
 }

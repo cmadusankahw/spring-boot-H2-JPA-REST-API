@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CSVImporter {
+public class CSVParserService {
     public static String TYPE = "text/csv";
     // static String[] HEADERS = { "id", "name", "dob", "address" };
 

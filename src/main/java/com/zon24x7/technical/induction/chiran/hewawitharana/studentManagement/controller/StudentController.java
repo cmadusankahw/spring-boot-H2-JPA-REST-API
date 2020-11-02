@@ -5,8 +5,7 @@ import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.co
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.exception.ResourceNotFoundException;
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.message.ResponseMessage;
 import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model.Student;
-import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service.CSVService;
-import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service.StudentService;
+import com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,15 +21,30 @@ import static com.zon24x7.technical.induction.chiran.hewawitharana.studentManage
 @RequestMapping("/api")
 public class StudentController {
     @Autowired
-    private CSVService csvService;
+    private CSVImportService csvImportService;
 
     @Autowired
-    private StudentService studentService;
+    private FindStudentByIdService findStudentByIdService;
+
+    @Autowired
+    private FindAllStudentsService findAllStudentsService;
+
+    @Autowired
+    private FindStudentByNameService findStudentByNameService;
+
+    @Autowired
+    private CreateStudentService createStudentService;
+
+    @Autowired
+    private UpdateStudentService updateStudentService;
+
+    @Autowired
+    private DeleteStudentService deleteStudentService;
 
     @GetMapping("/students")
     public ResponseEntity<List<Student>> getAllStudents() {
         try {
-            List<Student> students = studentService.findAllStudents();
+            List<Student> students = findAllStudentsService.findAllStudents();
             return ResponseEntity.ok().body(students);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
@@ -38,63 +52,39 @@ public class StudentController {
     }
 
     @GetMapping("/students/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable(value = "id") Long studentId)  {
-        try {
-            Student student = studentService.findStudentById(studentId);
+    public ResponseEntity<Student> getStudentById(@PathVariable(value = "id") Long studentId) throws ResourceNotFoundException {
+            Student student = findStudentByIdService.findStudentById(studentId);
             return ResponseEntity.ok().body(student);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
-        }
     }
 
     @GetMapping("/student/{name}")
-    public ResponseEntity<List<Student>> getStudentsByName(@PathVariable(value = CommonConstants.name) String studentName) {
-        try {
-            List<Student> students = studentService.findStudentsByName(studentName);
+    public ResponseEntity<List<Student>> getStudentsByName(@PathVariable(value = CommonConstants.name) String studentName) throws Exception {
+            List<Student> students = findStudentByNameService.findStudentsByName(studentName);
             return ResponseEntity.ok().body(students);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
-        }
     }
 
     @PostMapping("/students/import")
-    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam(CommonConstants.file) MultipartFile file) {
-        try {
-            csvService.importCSV(file, STUDENT);
+    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam(CommonConstants.file) MultipartFile file) throws Exception {
+            csvImportService.importCSV(file, STUDENT);
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(MessageConstants.csvUploaded + file.getOriginalFilename()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(MessageConstants.csvNotUploaded + file.getOriginalFilename()));
-        }
     }
 
     @PostMapping("/students")
-    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
-        try {
-            studentService.saveStudent(student);
+    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) throws Exception {
+            createStudentService.saveStudent(student);
             return ResponseEntity.ok().body(student);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
-        }
     }
 
     @PutMapping("/students/{id}")
     public ResponseEntity <Student> updateStudent(@PathVariable(value = CommonConstants.id) Long studentId,
-                                                    @Valid @RequestBody Student studentDetails) {
-        try {
-            Student updatedStudent = studentService.updateStudent(studentId, studentDetails);
+                                                    @Valid @RequestBody Student studentDetails) throws ResourceNotFoundException {
+            Student updatedStudent = updateStudentService.updateStudent(studentId, studentDetails);
             return ResponseEntity.ok().body(updatedStudent);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(null);
-        }
     }
 
     @DeleteMapping("/students/{id}")
-    public ResponseEntity<ResponseMessage> deleteStudent(@PathVariable(value = CommonConstants.id) Long studentId) {
-        try {
-           studentService.deleteStudent(studentId);
+    public ResponseEntity<ResponseMessage> deleteStudent(@PathVariable(value = CommonConstants.id) Long studentId) throws ResourceNotFoundException {
+           deleteStudentService.deleteStudent(studentId);
             return ResponseEntity.ok().body(new ResponseMessage(MessageConstants.studentDeleted + studentId));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(MessageConstants.studentNotDeleted + studentId));
-        }
     }
 }

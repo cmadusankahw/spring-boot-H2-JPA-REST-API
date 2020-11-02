@@ -14,7 +14,7 @@ import static com.zon24x7.technical.induction.chiran.hewawitharana.studentManage
 import static com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model.CSVTypes.TEACHER;
 
 @Service
-public class CSVService {
+public class CSVImportService {
     @Autowired
     private StudentRepository studentRepository;
 
@@ -22,9 +22,9 @@ public class CSVService {
     private TeacherRepository teacherRepository;
 
     public void importCSV(MultipartFile file, Enum tableType) {
-        if (CSVImporter.hasCSVFormat(file)) {
+        if (CSVParserService.hasCSVFormat(file)) {
             try {
-                List entities = CSVImporter.csvTotable(file.getInputStream(),tableType);
+                List entities = CSVParserService.csvTotable(file.getInputStream(),tableType);
                 if (STUDENT.equals(tableType)) {
                     studentRepository.saveAll(entities);
                 } else if (TEACHER.equals(tableType)) {
