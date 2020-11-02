@@ -1,34 +1,30 @@
 package com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "student")
-public class Student implements TableEntity {
+@Table(name = "teacher")
+public class Teacher implements TableEntity {
     private Long id;
     private String name;
     private Date dob;
     private String address;
 
-    public Student(String name, Date dob, String address) {
+    public Teacher(String name, Date dob, String address) {
         this.name = name;
         this.dob = dob;
         this.address = address;
     }
 
-    public Student(Long id, String name, Date dob, String address) {
+    public Teacher(Long id, String name, Date dob, String address) {
         this.id = id;
         this.name = name;
         this.dob = dob;
         this.address = address;
     }
 
-    public Student() {
+    public Teacher() {
     }
 
     @Id
@@ -67,6 +63,6 @@ public class Student implements TableEntity {
 
     @Override
     public String toString() {
-        return "Student [id=" + id + ", name=" + name + ", dob=" + dob + ", address=" + address + "]";
+        return "Teacher [id=" + id + ", name=" + name + ", dob=" + dob + ", address=" + address + "]";
     }
 }

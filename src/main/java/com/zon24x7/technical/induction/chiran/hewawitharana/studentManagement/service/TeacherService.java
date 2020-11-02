@@ -1,4 +1,8 @@
 package com.zon24x7.technical.induction.chiran.hewawitharana.studentManagement.service;
 
-public class CSVFactory {
+import org.springframework.stereotype.Service;
+
+@Service
+public class TeacherService {
+
 }

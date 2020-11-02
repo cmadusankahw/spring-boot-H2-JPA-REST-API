@@ -1,0 +1,17 @@
+--DROP TABLE IF EXISTS student;
+--
+--CREATE TABLE student (
+--  id INT AUTO_INCREMENT  PRIMARY KEY,
+--  name VARCHAR(250) ,
+--  dob VARCHAR(250) ,
+--  address VARCHAR(300)
+--);
+--
+--DROP TABLE IF EXISTS teacher;
+--
+--CREATE TABLE teacher (
+--  id INT AUTO_INCREMENT  PRIMARY KEY,
+--  name VARCHAR(250) ,
+--  dob DATE ,
+--  address VARCHAR(300)
+--);
