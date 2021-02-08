@@ -1,8 +1,8 @@
 # spring-boot-H2-JPA-REST-API
 
-This REST API is generated with Spring Boot Framework 2.3.5 and Java 1.8 with H2 JPA File storage DB support. This project was developed at Zone24x7 Technical Induction
+This REST API based project is responsible for employee management at a Appreal Industrial Firm located in Kurunegala, Sri Lanka. Project is generated with Spring Boot Framework 2.3.5 and Java 1.8 with JPA support. Database was implemented with MySQL.
 
-The Application follows SOLID Design Principles, Design Patterns and Exeception Handeling with Unit Testing.
+The Project follows SOLID Design Principles, Design Patterns and Exeception Handeling with Unit Testing.
 
 ### Requirements
 
